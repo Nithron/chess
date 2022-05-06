@@ -1,0 +1,18 @@
+.pawnWS {
+    width: 100px;
+    height: 100px;
+    background-color: #d4d1d1;
+    color: #d4d1d1;
+}
+
+.pawnBS {
+    width: 100px;
+    height: 100px;
+    background-color: #7c5d07fd;
+}
+
+.pawn {
+    width: 50px;
+    height: 100px;
+    background-color: #7c5d07fd;
+}

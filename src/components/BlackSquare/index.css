@@ -1,0 +1,11 @@
+.blackSquare {
+    height: 100px;
+    width: 100px;
+    background-color: #7c5d07fd;
+    
+}
+.blackSquareMove{
+    height: 100px;
+    width: 100px;
+    background-color: #8f6b07fd;
+}

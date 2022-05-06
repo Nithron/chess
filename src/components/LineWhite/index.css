@@ -1,0 +1,20 @@
+.lines{
+    display: flex;
+}
+
+.lines .whiteSquare {
+    height: 100px;
+    width: 100px;
+    background-color: #d4d1d1;
+}
+
+.lines .blackSquare {
+    height: 100px;
+    width: 100px;
+    background-color: #7c5d07fd;
+    align-items: flex-start;
+    flex-direction: column;
+    border-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
