@@ -28,11 +28,12 @@ function WhiteSquare(props) {
   const [bQueen, setBQueen] = useState(false)
   const [pieceToMove, setPieceToMove] = useState({})
   const [toMove, setToMove] = useState('white')
+  const [takeMove, setTakeMove] = useState(false)
+  const [takePiece, setTakePiece] = useState(props.pieceToMove)
   const [possibleMoves, setPossibleMoves] = useState(false)
   const [checkMoves, setCheckMoves] = useState('')
   const [movePawn, setMovePawn] = useState(false)
   const [renderLine, setRenderLine] = useState(true)
-  const [whiteToMove, setWhiteToMove] = useState(true)
   const [sameColor, setSameColor] = useState(true)
 
   useEffect(() => {
@@ -84,24 +85,22 @@ function WhiteSquare(props) {
       const auxValues = { ...checkMoves }
       const column = Number(auxValues.column)
       const line = Number(auxValues.line)
+      let auxPiece = { ...checkMoves }
 
       if (checkMoves.piece == 'move') {
         props.childToParent(checkMoves)
-        console.log('cliquei no peao e ele achou um peao')
-        setWhiteToMove(!whiteToMove)
-      }
-      // if (checkMoves.piece == 'whiteKnight')
-      if (
+        console.log('whiteToMove: ' + props.whiteToMove)
+      } else if (
         checkMoves.piece == 'whitePawn' ||
         checkMoves.piece == 'blackPawn' ||
-        checkMoves.piece == 'whiteKnight' ||
-        checkMoves.piece == 'blackKnight' ||
-        checkMoves.piece == 'whiteRookie' ||
-        checkMoves.piece == 'blackRookie' ||
         checkMoves.piece == 'whiteKing' ||
         checkMoves.piece == 'blackKing' ||
         checkMoves.piece == 'whiteQueen' ||
         checkMoves.piece == 'blackQueen' ||
+        checkMoves.piece == 'whiteKnight' ||
+        checkMoves.piece == 'blackKnight' ||
+        checkMoves.piece == 'whiteRookie' ||
+        checkMoves.piece == 'blackRookie' ||
         checkMoves.piece == 'whiteBishop' ||
         checkMoves.piece == 'blackBishop'
       ) {
@@ -115,59 +114,85 @@ function WhiteSquare(props) {
     setBoardMoves()
   }, [checkMoves])
 
-  function handleMove(piece, column, line) {
+  useEffect(() => {
+    console.log(props.pieceToMove)
+  }, [pieceToMove])
+
+  function handleMove(column, line) {
+    // console.log(props.possibleMoves)
+    // setTakeMove(false)
     let auxValues = []
-    auxValues.piece = piece
+    auxValues.piece = hasPiece()
     auxValues.column = column
     auxValues.line = line
-    setPieceToMove(auxValues)
-    if (piece != 'none') {
-      if (whiteToMove) {
-        // console.log(checkMoves.piece)
+    auxValues.take = false
+
+    // if (!pieceToMove.piece && String(auxValues.piece).slice(0, 5) == 'black') {
+    //   console.log('pode capturar?')
+    //   setTakePiece(auxValues)
+    //   console.log(auxValues)
+    //   setTakeMove(true)
+    //   console.log(takeMove)
+    // } else
+    if (
+      (props.possibleMoves == true &&
+        String(props.pieceToMove.piece).slice(0, 5) == 'white' &&
+        String(hasPiece()).slice(0, 5) == 'black') ||
+      (props.possibleMoves == true &&
+        String(props.pieceToMove.piece).slice(0, 5) == 'black' &&
+        String(hasPiece()).slice(0, 5) == 'white')
+    ) {
+      console.log('entrou no if')
+      // auxValues = { ...props.pieceToMove }
+      auxValues.piece = 'move'
+      auxValues.take = true
+      console.log(auxValues)
+      props.childToParent(auxValues)
+    } else if (auxValues.piece != 'none') {
+      if (props.whiteToMove) {
         if (
-          piece == 'whitePawn' ||
-          piece == 'whiteKnight' ||
-          piece == 'whiteRookie' ||
-          piece == 'whiteKing' ||
-          piece == 'whiteQueen' ||
-          piece == 'whiteBishop' ||
-          piece == 'move'
+          auxValues.piece == 'whitePawn' ||
+          auxValues.piece == 'whiteKnight' ||
+          auxValues.piece == 'whiteRookie' ||
+          auxValues.piece == 'whiteKing' ||
+          auxValues.piece == 'whiteQueen' ||
+          auxValues.piece == 'whiteBishop' ||
+          auxValues.piece == 'move'
         ) {
+          setPieceToMove(auxValues)
+          // console.log(auxValues)
           setCheckMoves(auxValues)
         }
-      } else {
+      } else if (!props.whiteToMove) {
         if (
-          piece == 'blackPawn' ||
-          piece == 'blackKnight' ||
-          piece == 'blackRookie' ||
-          piece == 'blackKing' ||
-          piece == 'blackQueen' ||
-          piece == 'blackBishop' ||
-          piece == 'move'
+          auxValues.piece == 'blackPawn' ||
+          auxValues.piece == 'blackKnight' ||
+          auxValues.piece == 'blackRookie' ||
+          auxValues.piece == 'blackKing' ||
+          auxValues.piece == 'blackQueen' ||
+          auxValues.piece == 'blackBishop' ||
+          auxValues.piece == 'move'
         ) {
-          console.log(auxValues)
+          // console.log(auxValues)
+          setPieceToMove(auxValues)
           setCheckMoves(auxValues)
         }
       }
     }
-    // console.log(piece)
-    // if (piece == 'move') {
-    //   setCheckMoves(auxValues)
-    // }
   }
 
   function squarePiece() {
     return (
       props.wPawn ||
       props.bPawn ||
+      props.wKing ||
+      props.bKing ||
       props.wRookie ||
       props.bRookie ||
       props.wBishop ||
       props.bBishop ||
       props.wKnight ||
       props.bKnight ||
-      props.wKing ||
-      props.bKing ||
       props.wQueen ||
       props.bQueen
     )
@@ -176,7 +201,7 @@ function WhiteSquare(props) {
   return (
     <div
       className={props.color == 'white' ? 'whiteSquare' : 'blackSquare'}
-      onClick={() => handleMove(hasPiece(), props.id, props.line)}
+      onClick={() => handleMove(props.id, props.line)}
     >
       {props.wPawn ? <WhitePawn squareColor={props.color} /> : <></>}
       {props.bPawn ? <BlackPawn squareColor={props.color} /> : <></>}
