@@ -632,7 +632,7 @@ function Board() {
             {linhas.map(linha => (
               <tr key={linha}>
                 {colunas.map(function (coluna) {
-                  let color = 'black'
+                  let color = 'white'
                   let wPawn = setBoard(linha, coluna, 'wPawn')
                   let bPawn = setBoard(linha, coluna, 'bPawn')
                   let wKing = setBoard(linha, coluna, 'wKing')
@@ -658,12 +658,12 @@ function Board() {
                   if (linha % 2 == 0) {
                     if (coluna % 2 != 0) {
                       // setColor('white')
-                      color = 'white'
+                      color = 'black'
                     }
                   } else {
                     if (coluna % 2 == 0) {
                       // setColor('white')
-                      color = 'white'
+                      color = 'black'
                     }
                   }
                   return (

@@ -30,6 +30,13 @@ export function bPawnMoves(linha, coluna, boardLine, boardColumn) {
   if (linha == boardLine + 1 && coluna == boardColumn) {
     set = true
   }
+  ////////////////TEMP
+  if (linha == boardLine + 1 && coluna == boardColumn + 1) {
+    set = true
+  }
+  if (linha == boardLine + 1 && coluna == boardColumn - 1) {
+    set = true
+  }
   return set
 }
 export function wPawnMoves(linha, coluna, boardLine, boardColumn) {
@@ -40,6 +47,13 @@ export function wPawnMoves(linha, coluna, boardLine, boardColumn) {
     }
   }
   if (linha == boardLine - 1 && coluna == boardColumn) {
+    set = true
+  }
+  ////////////////TEMP
+  if (linha == boardLine - 1 && coluna == boardColumn + 1) {
+    set = true
+  }
+  if (linha == boardLine - 1 && coluna == boardColumn - 1) {
     set = true
   }
   return set
