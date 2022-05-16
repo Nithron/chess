@@ -1,16 +1,27 @@
 .board {
-    border-right: 2px solid black;
-    padding-left: 2px;
-    padding-right: 2px;
-    display: flex;
+  border-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  display: flex;
 }
 
 .possibleMove {
-    margin-top: 38px;
-    margin-left: 38px;
-    height: 24px;
-    width: 24px;
-    background-color: rgb(119, 119, 119);
-    border-radius: 50%;
-    display: inline-block;
+  margin-top: 38px;
+  margin-left: 38px;
+  height: 24px;
+  width: 24px;
+  background-color: rgb(119, 119, 119);
+  border-radius: 50%;
+  display: inline-block;
+}
+.content {
+  display: flex;
+}
+
+.clock {
+  display: flex;
+  padding: 3px;
+  width: 350px;
+  /* align-items: ; */
+  justify-content: space-between;
 }

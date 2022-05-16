@@ -118,7 +118,8 @@ function WhiteSquare(props) {
     console.log(props.pieceToMove)
   }, [pieceToMove])
 
-  function handleMove(column, line) {
+  function handleMove(column, line, e) {
+    // e.preventDefault()
     // console.log(props.possibleMoves)
     // setTakeMove(false)
     let auxValues = []

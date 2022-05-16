@@ -15,6 +15,8 @@ import WhiteBishop from '../WhiteBishop'
 import BlackBishop from '../BlackBishop'
 import WhiteKnight from '../WhiteKnight'
 import BlackKnight from '../BlackKnight'
+import Timer from '../Timer'
+import Clock from '../Clock'
 import {
   knightMoves,
   rookieMoves,
@@ -134,11 +136,9 @@ function Board() {
     console.log(pieceToMove)
     let rCastle = false
     let lCastle = false
-    if (boardMoves.take) {
-      removePiece()
-    }
-    if (!takePiece) {
-      if (pieceToMove.piece == 'whitePawn') {
+
+    const exec = {
+      whitePawn: function () {
         posWPawn.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -152,9 +152,9 @@ function Board() {
         } else {
           posWPawn.push({ line: boardMoves.line, column: boardMoves.column })
         }
-      }
+      },
 
-      if (pieceToMove.piece == 'blackPawn') {
+      blackPawn: function () {
         posBPawn.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -168,9 +168,9 @@ function Board() {
         } else {
           posBPawn.push({ line: boardMoves.line, column: boardMoves.column })
         }
-      }
+      },
 
-      if (pieceToMove.piece == 'whiteKnight') {
+      whiteKnight: function () {
         posWKnight.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -180,9 +180,9 @@ function Board() {
           }
         })
         posWKnight.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'blackKnight') {
+      blackKnight: function () {
         posBKnight.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -192,9 +192,9 @@ function Board() {
           }
         })
         posBKnight.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'whiteRookie') {
+      whiteRookie: function () {
         posWRookie.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -209,9 +209,9 @@ function Board() {
           }
         })
         posWRookie.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'blackRookie') {
+      blackRookie: function () {
         posBRookie.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -226,9 +226,9 @@ function Board() {
           }
         })
         posBRookie.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'whiteBishop') {
+      whiteBishop: function () {
         posWBishop.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -238,9 +238,9 @@ function Board() {
           }
         })
         posWBishop.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'blackBishop') {
+      blackBishop: function () {
         posBBishop.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -250,9 +250,9 @@ function Board() {
           }
         })
         posBBishop.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'whiteKing') {
+      whiteKing: function () {
         posWKing.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -280,9 +280,9 @@ function Board() {
         }
         rCastle = false
         lCastle = false
-      }
+      },
 
-      if (pieceToMove.piece == 'blackKing') {
+      blackKing: function () {
         posBKing.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -301,18 +301,18 @@ function Board() {
         setBRCastle(false)
         setBLCastle(false)
         if (rCastle) {
-          posWRookie.splice(1, 1)
-          posWRookie.push({ line: 0, column: 5 })
+          posBRookie.splice(1, 1)
+          posBRookie.push({ line: 0, column: 5 })
         }
         if (lCastle) {
-          posWRookie.splice(0, 1)
-          posWRookie.push({ line: 0, column: 3 })
+          posBRookie.splice(0, 1)
+          posBRookie.push({ line: 0, column: 3 })
         }
         rCastle = false
         lCastle = false
-      }
+      },
 
-      if (pieceToMove.piece == 'whiteQueen') {
+      whiteQueen: function () {
         posWQueen.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -322,9 +322,9 @@ function Board() {
           }
         })
         posWQueen.push({ line: boardMoves.line, column: boardMoves.column })
-      }
+      },
 
-      if (pieceToMove.piece == 'blackQueen') {
+      blackQueen: function () {
         posBQueen.forEach(function (item, index) {
           if (
             item.line == pieceToMove.line &&
@@ -336,7 +336,18 @@ function Board() {
         posBQueen.push({ line: boardMoves.line, column: boardMoves.column })
       }
     }
+
+    if (boardMoves.take) {
+      removePiece()
+    }
+    if (!takePiece) {
+      const execFunction = exec[pieceToMove.piece]
+      if (pieceToMove.piece && pieceToMove.piece != 'move') {
+        execFunction()
+      }
+    }
     setWhiteToMove(!whiteToMove)
+    console.log(whiteToMove)
   }
 
   useEffect(() => {
@@ -361,50 +372,41 @@ function Board() {
 
   const possibleMoves = (coluna, linha) => {
     let set = false
-    if (boardMoves.take) console.log(boardMoves.take)
-    if (boardMoves.piece == 'whitePawn') {
-      if (wPawnMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'blackPawn') {
-      if (bPawnMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'whiteKnight') {
-      if (knightMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'blackKnight') {
-      if (knightMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'whiteRookie') {
-      if (rookieMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'blackRookie') {
-      if (rookieMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'whiteBishop') {
-      if (bishopMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'blackBishop') {
-      if (bishopMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'whiteKing') {
-      if (
-        kingMoves(
+    const possible = {
+      whitePawn: function () {
+        set = wPawnMoves(linha, coluna, boardMoves.line, boardMoves.column)
+      },
+
+      blackPawn: function () {
+        set = bPawnMoves(linha, coluna, boardMoves.line, boardMoves.column)
+      },
+
+      whiteKnight: function () {
+        set = knightMoves(linha, coluna, boardMoves.line, boardMoves.column)
+      },
+
+      blackKnight: function () {
+        possible.whiteKnight()
+      },
+
+      whiteRookie: function () {
+        set = rookieMoves(linha, coluna, boardMoves.line, boardMoves.column)
+      },
+
+      blackRookie: function () {
+        possible.whiteRookie()
+      },
+
+      whiteBishop: function () {
+        set = bishopMoves(linha, coluna, boardMoves.line, boardMoves.column)
+      },
+
+      blackBishop: function () {
+        possible.whiteBishop()
+      },
+
+      whiteKing: function () {
+        set = kingMoves(
           linha,
           coluna,
           boardMoves.line,
@@ -412,13 +414,10 @@ function Board() {
           wLCastle,
           wRCastle
         )
-      ) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'blackKing') {
-      if (
-        kingMoves(
+      },
+
+      blackKing: function () {
+        set = kingMoves(
           linha,
           coluna,
           boardMoves.line,
@@ -426,19 +425,19 @@ function Board() {
           bLCastle,
           bRCastle
         )
-      ) {
-        set = true
+      },
+
+      whiteQueen: function () {
+        set = queenMoves(linha, coluna, boardMoves.line, boardMoves.column)
+      },
+
+      blackQueen: function () {
+        possible.whiteQueen()
       }
     }
-    if (boardMoves.piece == 'whiteQueen') {
-      if (queenMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
-    }
-    if (boardMoves.piece == 'blackQueen') {
-      if (queenMoves(linha, coluna, boardMoves.line, boardMoves.column)) {
-        set = true
-      }
+    const possibleMovesFunction = possible[boardMoves.piece]
+    if (boardMoves.piece && boardMoves.piece != 'move') {
+      possibleMovesFunction()
     }
 
     // if (boardMoves.piece == 'move') {
@@ -449,112 +448,106 @@ function Board() {
   const setBoard = (linha, coluna, piece) => {
     let hasPiece = false
 
-    // let moves = {
-    //   wPawn() {
-    //     posWPawn.forEach(function (item, index) {
-    //       if (item.line == linha && item.column == coluna) {
-    //         // console.log('tem peao')
-    //         return true
-    //       }
-    //     })
-    //   }
-    // }
-
-    if (piece == 'wPawn') {
-      posWPawn.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
+    let moves = {
+      wPawn: function () {
+        posWPawn.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+        // })
+      },
+      bPawn: function () {
+        posBPawn.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      wRookie: function () {
+        posWRookie.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      bRookie: function () {
+        posBRookie.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      wKnight: function () {
+        posWKnight.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      bKnight: function () {
+        posBKnight.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      wBishop: function () {
+        posWBishop.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      bBishop: function () {
+        posBBishop.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      wQueen: function () {
+        posWQueen.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      bQueen: function () {
+        posBQueen.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      wKing: function () {
+        posWKing.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+        return hasPiece
+      },
+      bKing: function () {
+        posBKing.forEach(function (item, index) {
+          if (item.line == linha && item.column == coluna) {
+            hasPiece = true
+          }
+        })
+      }
     }
-
-    if (piece == 'bPawn') {
-      posBPawn.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'wKnight') {
-      posWKnight.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'bKnight') {
-      posBKnight.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'wRookie') {
-      posWRookie.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'bRookie') {
-      posBRookie.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'wBishop') {
-      posWBishop.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'bBishop') {
-      posBBishop.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'wKing') {
-      posWKing.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'bKing') {
-      posBKing.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'wQueen') {
-      posWQueen.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
-
-    if (piece == 'bQueen') {
-      posBQueen.forEach(function (item, index) {
-        if (item.line == linha && item.column == coluna) {
-          hasPiece = true
-        }
-      })
-    }
+    const setBoardFunction = moves[piece]
+    setBoardFunction()
 
     return hasPiece
   }
@@ -625,7 +618,7 @@ function Board() {
   // }
 
   return (
-    <>
+    <div className="content">
       <div className="board">
         <table>
           <tbody>
@@ -692,7 +685,7 @@ function Board() {
                         // newColumn={boardMoves.column}
                         // newLine={boardMoves.line}
                         possibleMoves={possibleMoves(coluna, linha)}
-                        renderBoard={renderBoard}
+                        // renderBoard={renderBoard}
                         childToParent={childToParent}
                         pieceToMove={pieceToMove}
                       />
@@ -704,7 +697,12 @@ function Board() {
           </tbody>
         </table>
       </div>
-    </>
+      <div className="clock">
+        {/* <Timer whiteToMove={whiteToMove} time="00:10:00" /> */}
+        {/* <Timer whiteToMove={!whiteToMove} time="00:10:00" /> */}
+        {/* <Clock /> */}
+      </div>
+    </div>
   )
 }
 
