@@ -610,13 +610,6 @@ function Board() {
     })
   }
 
-  // function setBoard() {
-  //   let piece
-  //   if (newBoard) {
-  //   }
-  //   return piece
-  // }
-
   return (
     <div className="content">
       <div className="board">
@@ -638,6 +631,8 @@ function Board() {
                   let bBishop = setBoard(linha, coluna, 'bBishop')
                   let wQueen = setBoard(linha, coluna, 'wQueen')
                   let bQueen = setBoard(linha, coluna, 'bQueen')
+                  let possibleMove = possibleMoves(coluna, linha)
+
                   // console.log(
                   //   'linha : ' +
                   //     linha +
@@ -659,6 +654,11 @@ function Board() {
                       color = 'black'
                     }
                   }
+
+                  if (possibleMove) {
+                    color = color + 'Possible'
+                  } else color = color
+
                   return (
                     <td key={linha + coluna}>
                       <WhiteSquare
@@ -684,7 +684,7 @@ function Board() {
                         // }
                         // newColumn={boardMoves.column}
                         // newLine={boardMoves.line}
-                        possibleMoves={possibleMoves(coluna, linha)}
+                        possibleMoves={possibleMove}
                         // renderBoard={renderBoard}
                         childToParent={childToParent}
                         pieceToMove={pieceToMove}

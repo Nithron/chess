@@ -201,21 +201,69 @@ function WhiteSquare(props) {
 
   return (
     <div
-      className={props.color == 'white' ? 'whiteSquare' : 'blackSquare'}
+      className={String(props.color) == 'white' ? 'whiteSquare' : 'blackSquare'}
       onClick={() => handleMove(props.id, props.line)}
     >
-      {props.wPawn ? <WhitePawn squareColor={props.color} /> : <></>}
-      {props.bPawn ? <BlackPawn squareColor={props.color} /> : <></>}
-      {props.wRookie ? <WhiteRookie squareColor={props.color} /> : <></>}
-      {props.bRookie ? <BlackRookie squareColor={props.color} /> : <></>}
-      {props.wQueen ? <WhiteQueen squareColor={props.color} /> : <></>}
-      {props.bQueen ? <BlackQueen squareColor={props.color} /> : <></>}
-      {props.wKing ? <WhiteKing squareColor={props.color} /> : <></>}
-      {props.bKing ? <BlackKing squareColor={props.color} /> : <></>}
-      {props.wBishop ? <WhiteBishop squareColor={props.color} /> : <></>}
-      {props.bBishop ? <BlackBishop squareColor={props.color} /> : <></>}
-      {props.wKnight ? <WhiteKnight squareColor={props.color} /> : <></>}
-      {props.bKnight ? <BlackKnight squareColor={props.color} /> : <></>}
+      {props.wPawn ? (
+        <WhitePawn squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.bPawn ? (
+        <BlackPawn squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.wRookie ? (
+        <WhiteRookie squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.bRookie ? (
+        <BlackRookie squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.wQueen ? (
+        <WhiteQueen squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.bQueen ? (
+        <BlackQueen squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.wKing ? (
+        <WhiteKing squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.bKing ? (
+        <BlackKing squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.wBishop ? (
+        <WhiteBishop squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.bBishop ? (
+        <BlackBishop squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.wKnight ? (
+        <WhiteKnight squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
+      {props.bKnight ? (
+        <BlackKnight squareColor={String(props.color).slice(0, 5)} />
+      ) : (
+        <></>
+      )}
       {props.possibleMoves == true && squarePiece() == false ? (
         <div className="possibleMove" />
       ) : (
